@@ -48,7 +48,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/efremovnv/docs/edit/main/',
+            'https://github.com/efremovnv/docs/edit/main/website/',
           routeBasePath: '/labs', // Docs will be served at /docs/labs
         },
         blog: false, // Blog is disabled
