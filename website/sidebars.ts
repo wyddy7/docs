@@ -21,18 +21,18 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Периферийные устройства',
       items: [
-        'pe/lab1',
-        'pe/lab2',
-        'pe/lab3',
-        'pe/lab4',
+        'peripheral-devices/lab1',
+        'peripheral-devices/lab2',
+        'peripheral-devices/lab3',
+        'peripheral-devices/lab4',
       ],
     },
     {
       type: 'category',
       label: 'Организация ЭВМ',
       items: [
-        'oevm/lab7',
-        'oevm/lab8',
+        'computer-organization/lab7',
+        'computer-organization/lab8',
       ],
     },
     {
