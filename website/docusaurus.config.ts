@@ -7,7 +7,7 @@ const ALGOLIA_API_KEY = process.env.ALGOLIA_API_KEY || '';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'Лабораторные работы',
+  title: 'efremovnv',
   tagline: 'Документация лабораторных работ',
   favicon: 'img/favicon.ico',
 
@@ -63,7 +63,7 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus.png',
     navbar: {
-      title: 'Лабораторные работы',
+      title: 'efremovnv',
       logo: {
         alt: 'Логотип',
         src: 'img/logo.svg',
@@ -73,7 +73,13 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'labsSidebar',
           position: 'left',
-          label: 'Лабораторные работы',
+          label: 'ЛР',
+        },
+        {
+          type: 'doc',
+          position: 'left',
+          docId: 'contributing',
+          label: 'Контрибьюция',
         },
         {
           href: 'https://github.com/efremovnv/docs',
@@ -87,7 +93,7 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Лабораторные работы',
+          title: 'efremovnv',
           items: [
             {
               label: 'Начало',
@@ -105,7 +111,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Лабораторные работы. Создано с помощью Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} efremovnv. Создано с помощью Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,
