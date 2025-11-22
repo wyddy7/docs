@@ -50,6 +50,7 @@ const config: Config = {
                     editUrl:
                         "https://github.com/efremovnv/docs/edit/dev/website/",
                     routeBasePath: "/labs", // Docs will be served at /docs/labs
+                    showLastUpdateTime: true,
                 },
                 blog: false, // Blog is disabled
                 theme: {
