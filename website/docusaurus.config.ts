@@ -83,6 +83,12 @@ const config: Config = {
                     label: "Контрибьюция",
                 },
                 {
+                    type: "doc",
+                    position: "left",
+                    docId: "links",
+                    label: "Ссылки",
+                },
+                {
                     href: "https://github.com/efremovnv/docs",
                     position: "right",
                     className: "header-github-link",
