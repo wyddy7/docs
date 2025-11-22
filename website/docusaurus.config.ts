@@ -74,7 +74,7 @@ const config: Config = {
                     type: "docSidebar",
                     sidebarId: "labsSidebar",
                     position: "left",
-                    label: "ЛР",
+                    label: "Методички",
                 },
                 {
                     type: "doc",
