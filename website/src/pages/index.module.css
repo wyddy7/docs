@@ -3,69 +3,264 @@
  * and scoped locally.
  */
 
+/* Hero Section */
 .heroBanner {
-  padding: 4rem 0;
+  padding: 6rem 0;
   text-align: center;
   position: relative;
   overflow: hidden;
+  background: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-darker) 100%);
+  color: white;
+  margin-bottom: 2rem;
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
+.heroBanner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(#ffffff 1px, transparent 1px);
+  background-size: 30px 30px;
+  opacity: 0.1;
+}
+
+.hero__title {
+  font-size: 4rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(to right, #ffffff, #e0e0e0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.hero__subtitle {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 2.5rem;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .buttons {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
-.features {
-  display: flex;
-  align-items: center;
-  padding: 2rem 0;
-  width: 100%;
-  background-color: var(--ifm-background-color);
+.heroButton {
+  transition: all 0.3s ease !important;
+  transform-origin: center;
 }
 
-.sections {
+.heroButton:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  background-color: #fff !important;
+  color: var(--ifm-color-primary) !important;
+  text-decoration: none !important;
+}
+
+/* Common Section Styles */
+.section {
   padding: 4rem 0;
+}
+
+.sectionAlternate {
   background-color: var(--ifm-color-emphasis-100);
 }
 
-.sections .card {
+.sectionTitle {
+  text-align: center;
+  margin-bottom: 3rem;
+  font-size: 2.5rem;
+  position: relative;
+  display: inline-block;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.sectionTitle::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: var(--ifm-color-primary);
+  margin: 1rem auto 0;
+  border-radius: 2px;
+}
+
+/* Features/About Section */
+.featureContainer {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  padding: 2rem 0;
+}
+
+.featureImage {
+  flex: 1;
+  text-align: center;
+  font-size: 8rem;
+  animation: float 6s ease-in-out infinite;
+}
+
+.featureContent {
+  flex: 1.5;
+}
+
+.featureText {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: var(--ifm-color-content-secondary);
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Cards Section */
+.card {
   height: 100%;
-  margin-bottom: 1rem;
+  border: none;
+  border-radius: 16px;
+  background: var(--ifm-card-background-color);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
 }
 
-.sections .card__body ul {
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--ifm-color-primary);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.cardHeader {
+  padding: 1.5rem 1.5rem 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cardIcon {
+  font-size: 2rem;
+  background: var(--ifm-color-emphasis-100);
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.cardBody {
+  padding: 1rem 1.5rem 1.5rem;
+}
+
+.cardList {
   list-style: none;
-  padding-left: 0;
+  padding: 0;
+  margin: 1rem 0 0;
 }
 
-.sections .card__body li {
-  margin: 0.5rem 0;
+.cardList li {
+  margin: 0.8rem 0;
+  padding-left: 1.5rem;
+  position: relative;
 }
 
-.sections .card__body li::before {
-  content: '→ ';
+.cardList li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
   color: var(--ifm-color-primary);
   font-weight: bold;
+  transition: transform 0.2s ease;
 }
 
-.quickStart {
-  padding: 4rem 0;
-  background-color: var(--ifm-background-color);
+.cardList li:hover::before {
+  transform: translateX(3px);
 }
 
-.quickStart ol {
-  padding-left: 1.5rem;
+/* Quick Start Section */
+.stepContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.quickStart li {
-  margin: 0.75rem 0;
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 1rem;
+  background: var(--ifm-background-color);
+  border-radius: 12px;
+  border: 1px solid var(--ifm-color-emphasis-200);
 }
 
+.stepNumber {
+  background: var(--ifm-color-primary);
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.stepContent h4 {
+  margin: 0 0 0.5rem;
+}
+
+.stepContent p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--ifm-color-content-secondary);
+}
+
+/* Responsive */
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 4rem 2rem;
+  }
+  
+  .hero__title {
+    font-size: 3rem;
+  }
+  
+  .featureContainer {
+    flex-direction: column;
+    text-align: center;
+    gap: 2rem;
+  }
+}
