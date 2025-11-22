@@ -24,6 +24,7 @@
   background-image: radial-gradient(#ffffff 1px, transparent 1px);
   background-size: 30px 30px;
   opacity: 0.1;
+  pointer-events: none;
 }
 
 .hero__title {
@@ -41,6 +42,11 @@
   font-weight: 400;
   margin-bottom: 2.5rem;
   color: rgba(255, 255, 255, 0.9);
+}
+
+.heroBanner .container {
+  position: relative;
+  z-index: 1;
 }
 
 .buttons {
