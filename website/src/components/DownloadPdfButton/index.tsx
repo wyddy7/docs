@@ -18,6 +18,14 @@ const initializeFonts = async () => {
 
         if (fonts?.pdfMake?.vfs) {
             pdfMake.vfs = fonts.pdfMake.vfs;
+            pdfMake.fonts = {
+                Roboto: {
+                    normal: "Roboto-Regular.ttf",
+                    bold: "Roboto-Medium.ttf",
+                    italics: "Roboto-Italic.ttf",
+                    bolditalics: "Roboto-MediumItalic.ttf",
+                },
+            };
         } else if (fonts?.vfs) {
             pdfMake.vfs = fonts.vfs;
         } else if (typeof fonts === "object" && fonts !== null) {
@@ -142,9 +150,9 @@ export default function DownloadPdfButton() {
             // Клонируем элемент глубоко
             const clonedContent = mainContent.cloneNode(true) as HTMLElement;
 
-            // Удаляем ненужные элементы из клона
+            // Удаляем ненужные элементы из клона (но НЕ удаляем кнопку скачивания)
             const elementsToRemove = clonedContent.querySelectorAll(
-                ".navbar, footer, .pagination-nav, aside, .theme-doc-sidebar-container, .theme-doc-toc-desktop, .breadcrumbs, a[href$='.pdf'], button"
+                ".navbar, footer, .pagination-nav, aside, .theme-doc-sidebar-container, .theme-doc-toc-desktop, .breadcrumbs"
             );
             elementsToRemove.forEach((el) => el.remove());
 
@@ -211,31 +219,173 @@ export default function DownloadPdfButton() {
 
             await Promise.all(imagePromises);
 
-            // Применяем стили для черного текста
-            const style = document.createElement("style");
-            style.textContent = `
-                * {
-                    color: #000000 !important;
-                    max-width: 100% !important;
-                    word-wrap: break-word !important;
-                    overflow-wrap: break-word !important;
+            // Находим все элементы кода и убираем ВСЕ фоновые стили
+            const codeElements = clonedContent.querySelectorAll(
+                "code, pre, .token, .prism-code, [class*='language-'], [class*='code'], [class*='prism'], span[class*='token']"
+            );
+            codeElements.forEach((el) => {
+                const htmlEl = el as HTMLElement;
+                // Убираем ВСЕ оформление - фон, рамки, отступы
+                htmlEl.style.background = "transparent";
+                htmlEl.style.backgroundColor = "transparent";
+                htmlEl.style.border = "none";
+                htmlEl.style.borderColor = "transparent";
+                htmlEl.style.padding = "0";
+                htmlEl.style.margin = "0";
+                htmlEl.style.fontStyle = "italic";
+                htmlEl.style.color = "#000000";
+                // Убираем все inline стили с background
+                const styleAttr = htmlEl.getAttribute("style");
+                if (styleAttr) {
+                    htmlEl.setAttribute(
+                        "style",
+                        styleAttr
+                            .split(";")
+                            .filter((s) => !s.includes("background"))
+                            .join(";") + "; background: transparent !important;"
+                    );
                 }
-            `;
-            clonedContent.appendChild(style);
+                // Добавляем класс для идентификации
+                htmlEl.classList.add("pdf-code-element");
 
-            // Конвертируем HTML в pdfmake формат
+                // Убираем все дочерние элементы с фоном
+                const childrenWithBg = htmlEl.querySelectorAll(
+                    "[style*='background'], [class*='background']"
+                );
+                childrenWithBg.forEach((child) => {
+                    const childEl = child as HTMLElement;
+                    childEl.style.background = "transparent";
+                    childEl.style.backgroundColor = "transparent";
+                    const childStyle = childEl.getAttribute("style");
+                    if (childStyle) {
+                        childEl.setAttribute(
+                            "style",
+                            childStyle
+                                .split(";")
+                                .filter((s) => !s.includes("background"))
+                                .join(";") +
+                                "; background: transparent !important;"
+                        );
+                    }
+                });
+            });
+
+            // Конвертируем HTML в pdfmake формат с правильными стилями для кода
             const htmlContent = clonedContent.outerHTML;
             const pdfMakeContent = htmlToPdfmake(htmlContent, {
                 tableAutoSize: true,
-                images: images, // Передаем словарь изображений
+                images: images,
+                defaultStyles: {
+                    code: {
+                        italics: true,
+                        color: "#000000",
+                        fillColor: null, // Явно убираем фон
+                        background: null,
+                    },
+                    pre: {
+                        italics: true,
+                        color: "#000000",
+                        fillColor: null, // Явно убираем фон
+                        background: null,
+                    },
+                },
+                customTag: function ({ element, ret, parents }) {
+                    // Обрабатываем элементы кода
+                    if (
+                        element.nodeName === "CODE" ||
+                        element.nodeName === "PRE" ||
+                        element.classList?.contains("pdf-code-element") ||
+                        element.classList?.contains("token") ||
+                        element.classList?.contains("prism-code")
+                    ) {
+                        // УДАЛЯЕМ все фоновые свойства
+                        delete ret.fillColor;
+                        delete ret.background;
+                        delete ret.backgroundColor;
+
+                        // Применяем курсив ко всему содержимому
+                        if (ret.text) {
+                            if (Array.isArray(ret.text)) {
+                                ret.text = ret.text.map((t: any) => {
+                                    if (typeof t === "object") {
+                                        delete t.fillColor;
+                                        delete t.background;
+                                        delete t.backgroundColor;
+                                        return { ...t, italics: true };
+                                    }
+                                    return { text: String(t), italics: true };
+                                });
+                            } else if (typeof ret.text === "string") {
+                                ret.text = { text: ret.text, italics: true };
+                            } else {
+                                delete ret.text.fillColor;
+                                delete ret.text.background;
+                                delete ret.text.backgroundColor;
+                                ret.text = { ...ret.text, italics: true };
+                            }
+                        }
+                        if (ret.stack) {
+                            ret.stack = ret.stack.map((s: any) => {
+                                if (typeof s === "object") {
+                                    delete s.fillColor;
+                                    delete s.background;
+                                    delete s.backgroundColor;
+                                    return { ...s, italics: true };
+                                }
+                                return { text: String(s), italics: true };
+                            });
+                        }
+                        ret.italics = true;
+                        ret.color = "#000000";
+                        // Явно убираем фон
+                        ret.fillColor = null;
+                        ret.background = null;
+                    }
+                    return ret;
+                },
             });
+
+            // Функция для рекурсивного удаления фона из элементов кода
+            const removeBackgroundFromCode = (item: any): any => {
+                if (Array.isArray(item)) {
+                    return item.map(removeBackgroundFromCode);
+                }
+                if (item && typeof item === "object") {
+                    const result: any = {};
+                    for (const key in item) {
+                        if (
+                            key === "fillColor" ||
+                            key === "background" ||
+                            key === "backgroundColor"
+                        ) {
+                            // Пропускаем фоновые свойства
+                            continue;
+                        } else if (
+                            key === "stack" ||
+                            key === "ol" ||
+                            key === "ul" ||
+                            key === "text"
+                        ) {
+                            result[key] = removeBackgroundFromCode(item[key]);
+                        } else {
+                            result[key] = item[key];
+                        }
+                    }
+                    return result;
+                }
+                return item;
+            };
+
+            // Удаляем фон из всех элементов кода
+            const cleanedContent = removeBackgroundFromCode(pdfMakeContent);
 
             // Создаем документ с правильными стилями
             const docDefinition = {
-                content: pdfMakeContent,
+                content: cleanedContent,
                 defaultStyle: {
                     fontSize: 14,
                     color: "#000000",
+                    font: "Roboto", // Явно указываем шрифт
                 },
                 styles: {
                     h1: {
@@ -266,7 +416,31 @@ export default function DownloadPdfButton() {
                     code: {
                         fontSize: 12,
                         color: "#000000",
-                        background: "#f5f5f5",
+                        italics: true,
+                        fillColor: null, // Явно убираем фон
+                        background: null,
+                    },
+                    pre: {
+                        fontSize: 12,
+                        color: "#000000",
+                        italics: true,
+                        fillColor: null, // Явно убираем фон
+                        background: null,
+                    },
+                    // Стили для элементов с классами кода
+                    "prism-code": {
+                        fontSize: 12,
+                        color: "#000000",
+                        italics: true,
+                        fillColor: null,
+                        background: null,
+                    },
+                    token: {
+                        fontSize: 12,
+                        color: "#000000",
+                        italics: true,
+                        fillColor: null,
+                        background: null,
                     },
                 },
                 pageSize: "A4",
