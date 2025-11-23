@@ -37,20 +37,19 @@ npm run deploy
 Перед использованием необходимо настроить:
 
 1. **GitHub репозиторий** в `docusaurus.config.ts`:
-   - `organizationName` - имя вашей организации/пользователя GitHub
-   - `projectName` - имя репозитория
-   - `url` - URL вашего сайта
 
-2. **Giscus комментарии** в `src/components/Comments/index.tsx`:
-   - `repo` - ваш репозиторий GitHub
-   - `repoId` - ID репозитория (уже настроено: 1095808904)
-   - `categoryId` - ID категории для обсуждений (уже настроено)
-   
-   **Важно:** Для работы комментариев нужно:
-   1. Включить Discussions в настройках репозитория GitHub (Settings → Features → Discussions)
-   2. Создать категорию "General" в Discussions (если её нет)
-   3. Если categoryId не работает, получить правильный ID на https://giscus.app
+    - `organizationName` - имя вашей организации/пользователя GitHub
+    - `projectName` - имя репозитория
+    - `url` - URL вашего сайта
 
-3. **GitHub Stars** в `src/components/GitHubStars/index.tsx`:
-   - URL репозитория в fetch запросе
+2. **GitHub Stars** в `src/components/GitHubStars/index.tsx`:
 
+    - URL репозитория в fetch запросе (используется на главной странице)
+
+3. **Компонент Comments (Giscus)** в `src/components/Comments/index.tsx`:
+    - Компонент существует, но в настоящее время **не используется**
+    - Если нужно включить комментарии, импортируйте и используйте компонент в нужных местах
+    - Для работы потребуется:
+        1. Включить Discussions в настройках репозитория GitHub (Settings → Features → Discussions)
+        2. Создать категорию "General" в Discussions
+        3. Обновить `repo`, `repoId` и `categoryId` в компоненте
