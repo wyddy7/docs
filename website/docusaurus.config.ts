@@ -7,19 +7,19 @@ const ALGOLIA_API_KEY = process.env.ALGOLIA_API_KEY || "";
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-    title: "wyddy7",
+    title: "efremovnv",
     tagline: "Документация лабораторных работ",
     favicon: "img/logo2.svg",
 
     // Set the production url of your site here
-    url: "https://wyddy7.github.io",
+    url: "https://efremovnv.github.io",
     // Set the /<baseUrl>/ pathname under which your site is served
     // For GitHub pages deployment, it is often '/<projectName>/'
     baseUrl: "/docs/",
 
     // GitHub pages deployment config.
     // If you aren't using GitHub pages, you don't need these.
-    organizationName: "wyddy7", // Usually your GitHub org/user name.
+    organizationName: "efremovnv", // Usually your GitHub org/user name.
     projectName: "docs", // Usually your repo name.
 
     onBrokenLinks: "warn",
@@ -48,7 +48,7 @@ const config: Config = {
                     // Please change this to your repo.
                     // Remove this to remove the "edit this page" links.
                     editUrl:
-                        "https://github.com/wyddy7/docs/edit/main/website/",
+                        "https://github.com/efremovnv/docs/edit/main/website/",
                     routeBasePath: "/labs", // Docs will be served at /docs/labs
                     showLastUpdateTime: true,
                 },
@@ -64,7 +64,7 @@ const config: Config = {
         // Replace with your project's social card
         image: "img/docusaurus.png",
         navbar: {
-            title: "wyddy7",
+            title: "efremovnv",
             logo: {
                 alt: "Логотип",
                 src: "img/logo.svg",
@@ -90,7 +90,7 @@ const config: Config = {
                     label: "Ссылки",
                 },
                 {
-                    href: "https://github.com/wyddy7/docs",
+                    href: "https://github.com/efremovnv/docs",
                     position: "right",
                     className: "header-github-link",
                     "aria-label": "GitHub repository",
@@ -101,7 +101,7 @@ const config: Config = {
             style: "dark",
             links: [
                 {
-                    title: "wyddy7",
+                    title: "efremovnv",
                     items: [
                         {
                             label: "Начало",
@@ -114,12 +114,12 @@ const config: Config = {
                     items: [
                         {
                             label: "GitHub",
-                            href: "https://github.com/wyddy7/docs",
+                            href: "https://github.com/efremovnv/docs",
                         },
                     ],
                 },
             ],
-            copyright: `Copyright © ${new Date().getFullYear()} wyddy7. Создано с помощью Docusaurus.`,
+            copyright: `Copyright © ${new Date().getFullYear()} efremovnv. Создано с помощью Docusaurus.`,
         },
         prism: {
             theme: prismThemes.github,
