@@ -15,8 +15,11 @@ import styles from "./index.module.css";
 const CUSTOM_DOC_TITLES: Record<string, string> = {
     "course-work/01-rp-op-design": "Проектирование РП и ОП",
     "course-work/02-arithmetic-device": "Арифметическое устройство",
-    "computer-organization/lab7": "Лабораторная работа 7 (JTAG)",
-    "computer-organization/lab8": "Лабораторная работа 8 (Таймер)",
+    "computer-organization/labs-sem7/lab6": "Лабораторная работа 6 (Ввод/вывод и прерывания)",
+    "computer-organization/labs-sem7/lab7": "Лабораторная работа 7 (JTAG UART)",
+    "computer-organization/labs-sem7/lab8": "Лабораторная работа 8 (Интервальный таймер)",
+    "computer-organization/theory/jtag-theory": "JTAG - основы и теория",
+    "computer-organization/theory/jtag-uart-port": "JTAG порт",
     "peripheral-devices/lab1": "ЛР 1: Введение и инструменты",
     "peripheral-devices/lab2": "ЛР 2: Исследование команд",
     "peripheral-devices/lab3": "ЛР 3: Прерывания и исключения",

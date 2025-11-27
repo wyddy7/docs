@@ -42,12 +42,23 @@ const sidebars: SidebarsConfig = {
           ],
         },
         'computer-organization/lab-manual-sem6',
-        'computer-organization/lab7-jtag',
-        'computer-organization/jtag-theory',
-        'computer-organization/jtag-uart-port',
-        'computer-organization/lab8-interval-timer',
-        'computer-organization/lab7',
-        'computer-organization/lab8',
+        {
+          type: 'category',
+          label: 'Лабораторные работы (7 семестр)',
+          items: [
+            'computer-organization/labs-sem7/lab6',
+            'computer-organization/labs-sem7/lab7',
+            'computer-organization/labs-sem7/lab8',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Теория',
+          items: [
+            'computer-organization/theory/jtag-theory',
+            'computer-organization/theory/jtag-uart-port',
+          ],
+        },
       ],
     },
     {

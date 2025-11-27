@@ -19,8 +19,19 @@ docs/
 │       ├── lab3/
 │       └── lab4/
 ├── computer-organization/             # Организация ЭВМ
-│   ├── lab7.md
-│   ├── lab8.md
+│   ├── lab-manual-sem6.md            # Методичка для 6 семестра
+│   ├── labs-sem7/                    # Лабораторные работы 7 семестра
+│   │   ├── lab6.md
+│   │   ├── lab7.md
+│   │   └── lab8.md
+│   ├── theory/                       # Теоретические материалы
+│   │   ├── jtag-theory.md
+│   │   └── jtag-uart-port.md
+│   ├── additional-labs/              # Дополнительные лабы (x86)
+│   │   ├── lab1-emulator-debug.md
+│   │   ├── lab2-protected-mode.md
+│   │   ├── lab3-interrupts-exceptions.md
+│   │   └── lab4-paging.md
 │   └── assets/
 └── course-work/                       # Курсовая работа
     ├── 01-rp-op-design.md
@@ -49,7 +60,26 @@ labsSidebar: [
     {
         type: "category",
         label: "Организация ЭВМ",
-        items: ["computer-organization/lab7", "computer-organization/lab8"],
+        items: [
+            "computer-organization/lab-manual-sem6",
+            {
+                type: "category",
+                label: "Лабораторные работы (7 семестр)",
+                items: [
+                    "computer-organization/labs-sem7/lab6",
+                    "computer-organization/labs-sem7/lab7",
+                    "computer-organization/labs-sem7/lab8",
+                ],
+            },
+            {
+                type: "category",
+                label: "Теория",
+                items: [
+                    "computer-organization/theory/jtag-theory",
+                    "computer-organization/theory/jtag-uart-port",
+                ],
+            },
+        ],
     },
     {
         type: "category",
