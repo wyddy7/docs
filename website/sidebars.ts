@@ -33,7 +33,7 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'category',
-          label: '[extra] Дополнительные лабы',
+          label: '[extra] Дополнительные лабы (неканон)',
           items: [
             'computer-organization/additional-labs/lab1-emulator-debug',
             'computer-organization/additional-labs/lab2-protected-mode',
@@ -41,7 +41,19 @@ const sidebars: SidebarsConfig = {
             'computer-organization/additional-labs/lab4-paging',
           ],
         },
-        'computer-organization/lab-manual-sem6',
+        {
+          type: 'category',
+          label: '[in progress] Лабораторные работы (6 семестр)',
+          items: [
+            'computer-organization/labs-sem6/lab-manual-sem6',
+            'computer-organization/labs-sem6/lab1',
+            'computer-organization/labs-sem6/lab2',
+            'computer-organization/labs-sem6/lab3',
+            'computer-organization/labs-sem6/lab4',
+            'computer-organization/labs-sem6/lab5',
+            'computer-organization/labs-sem6/lab6',
+          ],
+        },
         {
           type: 'category',
           label: 'Лабораторные работы (7 семестр)',
