@@ -33,7 +33,7 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'category',
-          label: 'Дополнительные лабы',
+          label: '[extra] Дополнительные лабы',
           items: [
             'computer-organization/additional-labs/lab1-emulator-debug',
             'computer-organization/additional-labs/lab2-protected-mode',
