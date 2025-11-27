@@ -31,10 +31,16 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Организация ЭВМ',
       items: [
-        'computer-organization/lab1-emulator-debug',
-        'computer-organization/lab2-protected-mode',
-        'computer-organization/lab3-interrupts-exceptions',
-        'computer-organization/lab4-paging',
+        {
+          type: 'category',
+          label: 'Дополнительные лабы',
+          items: [
+            'computer-organization/additional-labs/lab1-emulator-debug',
+            'computer-organization/additional-labs/lab2-protected-mode',
+            'computer-organization/additional-labs/lab3-interrupts-exceptions',
+            'computer-organization/additional-labs/lab4-paging',
+          ],
+        },
         'computer-organization/lab-manual-sem6',
         'computer-organization/lab7-jtag',
         'computer-organization/jtag-theory',
