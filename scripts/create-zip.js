@@ -1,8 +1,15 @@
 /**
- * Универсальный скрипт для создания ZIP архива из папки "Программные заготовки"
+ * Универсальный скрипт для создания ZIP архива из любой папки
  * Работает на всех платформах (Windows, Linux, macOS) и в CI/CD (GitHub Actions)
  * 
  * Использование:
+ *   # С параметрами (рекомендуется)
+ *   node scripts/create-zip.js <исходная_папка> <выходной_файл>
+ *   
+ *   # С параметрами (относительные пути от корня проекта)
+ *   node scripts/create-zip.js "old_doc/актуальные материалы/OEVM/7/Программные заготовки" "website/static/downloads/programmnye-zagotovki.zip"
+ *   
+ *   # Без параметров (использует значения по умолчанию для обратной совместимости)
  *   node scripts/create-zip.js
  * 
  * Требования:
@@ -13,11 +20,42 @@
 const fs = require('fs');
 const path = require('path');
 
-// Пути
+// Получаем аргументы командной строки
+const args = process.argv.slice(2);
+
+// Значения по умолчанию (для обратной совместимости)
 const rootDir = path.join(__dirname, '..');
-const sourceDir = path.join(rootDir, 'old_doc', 'актуальные материалы', 'OEVM', '7', 'Программные заготовки');
-const outputDir = path.join(rootDir, 'website', 'static', 'downloads');
-const outputFile = path.join(outputDir, 'programmnye-zagotovki.zip');
+const defaultSourceDir = path.join(rootDir, 'old_doc', 'актуальные материалы', 'OEVM', '7', 'Программные заготовки');
+const defaultOutputFile = path.join(rootDir, 'website', 'static', 'downloads', 'programmnye-zagotovki.zip');
+
+// Определяем пути: либо из аргументов, либо по умолчанию
+let sourceDir, outputFile;
+
+if (args.length >= 2) {
+    // Используем переданные параметры
+    sourceDir = path.isAbsolute(args[0]) 
+        ? args[0] 
+        : path.join(rootDir, args[0]);
+    outputFile = path.isAbsolute(args[1]) 
+        ? args[1] 
+        : path.join(rootDir, args[1]);
+} else if (args.length === 1) {
+    // Только исходная папка, выходной файл - рядом с исходной папкой
+    sourceDir = path.isAbsolute(args[0]) 
+        ? args[0] 
+        : path.join(rootDir, args[0]);
+    const dirName = path.basename(sourceDir);
+    const outputDir = path.dirname(sourceDir);
+    outputFile = path.join(outputDir, `${dirName}.zip`);
+} else {
+    // Используем значения по умолчанию
+    sourceDir = defaultSourceDir;
+    outputFile = defaultOutputFile;
+}
+
+// Нормализуем пути (убираем лишние слеши и точки)
+sourceDir = path.normalize(sourceDir);
+outputFile = path.normalize(outputFile);
 
 // Пытаемся найти archiver в website/node_modules (для работы в CI/CD)
 let archiver;
@@ -39,10 +77,17 @@ try {
 // Проверяем существование исходной папки
 if (!fs.existsSync(sourceDir)) {
     console.error(`❌ Ошибка: исходная папка не найдена: ${sourceDir}`);
+    console.error('');
+    console.error('Использование:');
+    console.error('  node scripts/create-zip.js <исходная_папка> <выходной_файл>');
+    console.error('');
+    console.error('Пример:');
+    console.error('  node scripts/create-zip.js "old_doc/папка с файлами" "website/static/downloads/archive.zip"');
     process.exit(1);
 }
 
-// Создаем папку для выходных файлов, если её нет
+// Создаем папку для выходного файла, если её нет
+const outputDir = path.dirname(outputFile);
 if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
     console.log(`✅ Создана папка: ${outputDir}`);
@@ -79,7 +124,8 @@ archive.on('error', (err) => {
 output.on('close', () => {
     const sizeInMB = (archive.pointer() / 1024 / 1024).toFixed(2);
     console.log(`✅ ZIP архив успешно создан!`);
-    console.log(`   Файл: ${outputFile}`);
+    console.log(`   Исходная папка: ${sourceDir}`);
+    console.log(`   Выходной файл: ${outputFile}`);
     console.log(`   Размер: ${sizeInMB} MB`);
     console.log(`   Всего байт: ${archive.pointer()}`);
 });
@@ -98,4 +144,3 @@ archive.directory(sourceDir, false);
 
 // Завершаем архивацию
 archive.finalize();
-
