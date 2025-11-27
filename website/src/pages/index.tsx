@@ -13,20 +13,53 @@ import styles from "./index.module.css";
 
 // Словарь кастомных названий для конкретных документов
 const CUSTOM_DOC_TITLES: Record<string, string> = {
-    "course-work/01-rp-op-design": "Проектирование РП и ОП",
-    "course-work/02-arithmetic-device": "Арифметическое устройство",
+    "course-work/rp-op-design": "Проектирование РП и ОП",
+    "course-work/arithmetic-device": "Арифметическое устройство",
+    // Организация ЭВМ - 7 семестр
     "computer-organization/labs-sem7/lab6": "Лабораторная работа 6 (Ввод/вывод и прерывания)",
     "computer-organization/labs-sem7/lab7": "Лабораторная работа 7 (JTAG UART)",
     "computer-organization/labs-sem7/lab8": "Лабораторная работа 8 (Интервальный таймер)",
+    // Организация ЭВМ - 6 семестр
+    "computer-organization/labs-sem6/lab-manual-sem6": "Методичка 6 семестра",
+    "computer-organization/labs-sem6/lab1": "Лабораторная работа 1",
+    "computer-organization/labs-sem6/lab2": "Лабораторная работа 2",
+    "computer-organization/labs-sem6/lab3": "Лабораторная работа 3",
+    "computer-organization/labs-sem6/lab4": "Лабораторная работа 4",
+    "computer-organization/labs-sem6/lab5": "Лабораторная работа 5",
+    "computer-organization/labs-sem6/lab6": "Лабораторная работа 6",
+    // Организация ЭВМ - теория
     "computer-organization/theory/jtag-theory": "JTAG - основы и теория",
     "computer-organization/theory/jtag-uart-port": "JTAG порт",
-    "peripheral-devices/lab1": "ЛР 1: Введение и инструменты",
-    "peripheral-devices/lab2": "ЛР 2: Исследование команд",
-    "peripheral-devices/lab3": "ЛР 3: Прерывания и исключения",
-    "peripheral-devices/lab4": "ЛР 4: Страничная организация",
+    // Организация ЭВМ - дополнительные лабы
+    "computer-organization/additional-labs/lab1-emulator-debug": "Доп. лаба 1: Эмулятор и отладка",
+    "computer-organization/additional-labs/lab2-protected-mode": "Доп. лаба 2: Защищенный режим",
+    "computer-organization/additional-labs/lab3-interrupts-exceptions": "Доп. лаба 3: Прерывания и исключения",
+    "computer-organization/additional-labs/lab4-paging": "Доп. лаба 4: Страничная организация",
+    // Периферийные устройства
+    "peripheral-devices/lab-keyboard-ps2": "ЛР: Клавиатура PS/2",
+    "peripheral-devices/lab-mouse-ps2": "ЛР: Мышь PS/2",
+    "peripheral-devices/lab-audio": "ЛР: Аудио",
+    "peripheral-devices/lab-vga": "ЛР: VGA",
 };
 
-// Helper to get items from sidebar configuration
+// Helper to recursively extract all doc IDs from a category (including nested categories)
+function extractDocIds(items: any[]): string[] {
+    const docIds: string[] = [];
+    
+    for (const item of items) {
+        if (typeof item === "string") {
+            // Direct doc ID
+            docIds.push(item);
+        } else if (typeof item === "object" && item.type === "category" && item.items) {
+            // Nested category - recursively extract
+            docIds.push(...extractDocIds(item.items));
+        }
+    }
+    
+    return docIds;
+}
+
+// Helper to get items from sidebar configuration (recursively)
 function getCategoryItems(categoryLabel: string): string[] {
     // @ts-ignore
     const sidebar = sidebars.labsSidebar;
@@ -40,9 +73,8 @@ function getCategoryItems(categoryLabel: string): string[] {
     );
 
     if (category && typeof category === "object" && "items" in category) {
-        return (category as any).items.filter(
-            (item: any) => typeof item === "string"
-        );
+        // Recursively extract all doc IDs (including from nested categories)
+        return extractDocIds((category as any).items);
     }
 
     return [];
@@ -117,8 +149,8 @@ function HomepageFeatures() {
                         <p className={styles.featureText}>
                             Все методички по курсам "Периферийные устройства" и "Организация ЭВМ" собраны здесь в одном месте. 
                             Откройте нужную работу — и сразу найдете всё необходимое для её выполнения: пошаговые инструкции, 
-                            примеры кода на Assembly и VHDL, разбор типичных ошибок и теорию. Больше не нужно искать информацию 
-                            по разным источникам — всё уже структурировано и готово к использованию.
+                            примеры кода на Assembly и VHDL (в некоторых работах) и теорию. 
+                            Больше не нужно искать информацию по разным источникам — всё уже структурировано и готово к использованию.
                         </p>
                     </div>
                 </div>
@@ -252,11 +284,10 @@ function HomepageQuickStart() {
                             <div className={styles.step}>
                                 <div className={styles.stepNumber}>3</div>
                                 <div className={styles.stepContent}>
-                                    <h4>Следуйте чеклисту</h4>
+                                    <h4>Следуйте инструкциям</h4>
                                     <p>
-                                        Выполняйте пункты из "Чеклиста
-                                        выполнения" и сверяйтесь с FAQ при
-                                        проблемах.
+                                        Выполняйте работу по пошаговым инструкциям, 
+                                        описанным в методичке.
                                     </p>
                                 </div>
                             </div>
@@ -294,7 +325,7 @@ function HomepageQuickStart() {
                                     <h4>Делитесь знаниями</h4>
                                     <p>
                                         Добавляйте полезные советы и решения
-                                        частых проблем в FAQ.
+                                        частых проблем в FAQ (где он есть).
                                     </p>
                                 </div>
                             </div>
