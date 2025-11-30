@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Giscus from "@giscus/react";
+import styles from "./comments.module.css";
 
 function getColorMode(): "dark" | "light" {
     if (typeof window === "undefined") {
@@ -31,10 +32,16 @@ function getColorMode(): "dark" | "light" {
     return "light";
 }
 
-export default function Comments(): JSX.Element {
+interface CommentsProps {
+    /** Отключить комментарии (для использования через frontmatter) */
+    disabled?: boolean;
+}
+
+export default function Comments({ disabled = false }: CommentsProps): JSX.Element | null {
     const [colorMode, setColorMode] = useState<"dark" | "light">(() =>
         getColorMode()
     );
+    const [hasError, setHasError] = useState(false);
 
     useEffect(() => {
         // Функция для обновления темы
@@ -72,7 +79,7 @@ export default function Comments(): JSX.Element {
         // Слушаем изменения системных предпочтений
         const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
         const handleMediaChange = () => {
-            updateColorMode();
+            setColorMode(getColorMode());
         };
         mediaQuery.addEventListener("change", handleMediaChange);
 
@@ -83,27 +90,40 @@ export default function Comments(): JSX.Element {
         };
     }, []);
 
+    // Не показывать комментарии, если они отключены
+    if (disabled) {
+        return null;
+    }
+
+    // Обработка ошибок загрузки Giscus
+    if (hasError) {
+        return null;
+    }
+
     return (
-        <div>
-            <Giscus
-                id="comments"
-                repo="efremovnv/docs"
-                repoId="1095808904"
-                category="General"
-                categoryId="DIC_kwDOKqJXps4CgqFh"
-                mapping="pathname"
-                strict="1"
-                reactionsEnabled="1"
-                emitMetadata="0"
-                inputPosition="top"
-                theme={
-                    colorMode === "dark"
-                        ? "dark_tritanopia"
-                        : "light_tritanopia"
-                }
-                lang="ru"
-                loading="lazy"
-            />
+        <div className={styles.commentsContainer}>
+            <div className={styles.commentsWrapper}>
+                <Giscus
+                    id="comments"
+                    repo="efremovnv/docs"
+                    repoId="1095808904"
+                    category="General"
+                    categoryId="DIC_kwDOKqJXps4CgqFh"
+                    mapping="pathname"
+                    strict="1"
+                    reactionsEnabled="1"
+                    emitMetadata="0"
+                    inputPosition="top"
+                    theme={
+                        colorMode === "dark"
+                            ? "dark_tritanopia"
+                            : "light_tritanopia"
+                    }
+                    lang="ru"
+                    loading="lazy"
+                    onError={() => setHasError(true)}
+                />
+            </div>
         </div>
     );
 }

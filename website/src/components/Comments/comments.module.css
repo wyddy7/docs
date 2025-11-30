@@ -1,0 +1,25 @@
+.commentsContainer {
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.commentsWrapper {
+    max-width: 100%;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .commentsContainer {
+        margin-top: 2rem;
+        margin-bottom: 1.5rem;
+        padding-top: 1.5rem;
+    }
+}
+
+/* Улучшение отображения в темной теме */
+html[data-theme='dark'] .commentsContainer {
+    border-top-color: var(--ifm-color-emphasis-200);
+}
+
