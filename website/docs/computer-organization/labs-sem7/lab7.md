@@ -30,7 +30,7 @@ import DownloadZipButton from '@site/src/components/DownloadZipButton';
 
 <DownloadZipButton 
   zipPath="downloads/programmnye-zagotovki.zip" 
-  buttonText="📦 Скачать программные заготовки"
+  buttonText="📦 Заготовки"
 />
 
 ## Подготовка к лабораторной работе

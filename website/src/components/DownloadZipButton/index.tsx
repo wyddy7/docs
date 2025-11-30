@@ -18,7 +18,7 @@ interface DownloadZipButtonProps {
  * @example
  * <DownloadZipButton 
  *   zipPath="downloads/programmnye-zagotovki.zip" 
- *   buttonText="📦 Скачать программные заготовки"
+ *   buttonText="📦 Заготовки"
  * />
  */
 export default function DownloadZipButton({
@@ -26,33 +26,16 @@ export default function DownloadZipButton({
     buttonText = "📦 Скачать ZIP",
     fileName,
 }: DownloadZipButtonProps) {
-    // Используем useBaseUrl для правильного пути с учетом baseUrl из конфигурации
-    const fileUrl = useBaseUrl(zipPath);
-    
-    const handleDownload = () => {
-        // Создаем временную ссылку для скачивания
-        const link = document.createElement("a");
-        link.href = fileUrl;
-        link.download = fileName || zipPath.split("/").pop() || "download.zip";
-        link.style.display = 'none';
-        document.body.appendChild(link);
-        link.click();
-        
-        // Безопасное удаление элемента
-        if (link.parentNode) {
-            link.parentNode.removeChild(link);
-        }
-    };
-
+    // Создаем скрытый маркер для AutoDownloadZipButtons
+    // Компонент AutoDownloadZipButtons найдет этот маркер и создаст кнопку в контейнере
     return (
-        <div className="margin-top--lg">
-            <button
-                onClick={handleDownload}
-                className="button button--secondary button--sm"
-            >
-                {buttonText}
-            </button>
-        </div>
+        <div
+            data-zip-path={zipPath}
+            data-button-text={buttonText}
+            data-file-name={fileName}
+            style={{ display: 'none' }}
+            aria-hidden="true"
+        />
     );
 }
 
