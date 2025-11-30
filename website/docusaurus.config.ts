@@ -82,9 +82,9 @@ const config: Config = {
                     label: "Методички",
                 },
                 {
-                    type: "doc",
+                    type: "docSidebar",
+                    sidebarId: "contributingSidebar",
                     position: "left",
-                    docId: "contributing",
                     label: "Контрибьюция",
                 },
                 {

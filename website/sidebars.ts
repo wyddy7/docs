@@ -83,6 +83,15 @@ const sidebars: SidebarsConfig = {
       ],
     },
   ],
+  // Структура боковой панели для контрибьюции
+  contributingSidebar: [
+    'contributing/index',
+    'contributing/getting-started',
+    'contributing/documentation-standards',
+    'contributing/working-with-files',
+    'contributing/comments',
+    'contributing/admin-guide',
+  ],
 };
 
 export default sidebars;
