@@ -19,29 +19,33 @@ type Props = WrapperProps<typeof ContentType>;
  * - Страницах links и contributing
  */
 function shouldShowComments(pathname: string): boolean {
+  // Нормализуем путь (убираем trailing slash)
+  const normalizedPath = pathname.replace(/\/$/, '');
+  
   // Показываем комментарии на лабораторных работах
   // Путь будет типа: /docs/labs/computer-organization/labs-sem6/lab1
+  // или /labs/computer-organization/labs-sem6/lab1
   if (
-    pathname.includes('/labs-sem6/') ||
-    pathname.includes('/labs-sem7/') ||
-    pathname.includes('/additional-labs/')
+    normalizedPath.includes('labs-sem6/') ||
+    normalizedPath.includes('labs-sem7/') ||
+    normalizedPath.includes('additional-labs/')
   ) {
     return true;
   }
 
   // Показываем комментарии на курсовых работах
   // Путь будет типа: /docs/labs/course-work/01-rp-op-design
-  if (pathname.includes('/course-work/')) {
+  if (normalizedPath.includes('course-work/')) {
     return true;
   }
 
   // Показываем комментарии на страницах links и contributing
   // Путь будет типа: /docs/labs/links или /docs/labs/contributing
   if (
-    pathname.endsWith('/links') ||
-    pathname.endsWith('/contributing') ||
-    pathname.includes('/links/') ||
-    pathname.includes('/contributing/')
+    normalizedPath.endsWith('/links') ||
+    normalizedPath.endsWith('/contributing') ||
+    normalizedPath.includes('/links/') ||
+    normalizedPath.includes('/contributing/')
   ) {
     return true;
   }
@@ -53,6 +57,11 @@ function shouldShowComments(pathname: string): boolean {
 export default function ContentWrapper(props: Props): React.JSX.Element {
   const location = useLocation();
   const showComments = shouldShowComments(location.pathname);
+
+  // Отладочный вывод (только в development)
+  if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+    console.log('[Comments] Pathname:', location.pathname, 'Show comments:', showComments);
+  }
 
   return (
     <>
@@ -68,7 +77,8 @@ export default function ContentWrapper(props: Props): React.JSX.Element {
         </div>
       </div>
       <Content {...props} />
-      {showComments && <Comments />}
+      {/* Временно отключено: требуется установка Giscus app на репозиторий */}
+      {/* {showComments && <Comments />} */}
     </>
   );
 }
