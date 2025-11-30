@@ -163,3 +163,13 @@ img[srcset*="placeholder"] {
     display: block !important;
     margin: 1rem auto !important;
 }
+
+/* Анимация спиннера для кнопок загрузки */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

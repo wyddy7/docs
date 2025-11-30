@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import JSZip from "jszip";
 
 interface DownloadListingsButtonProps {
@@ -27,6 +27,8 @@ export default function DownloadListingsButton({
 }: DownloadListingsButtonProps) {
     const [hasListings, setHasListings] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const [buttonWidth, setButtonWidth] = useState<number | undefined>(undefined);
 
     // Проверяем наличие листингов при монтировании компонента
     useEffect(() => {
@@ -56,6 +58,17 @@ export default function DownloadListingsButton({
 
         return () => clearTimeout(timeout);
     }, []);
+
+    // Сохраняем ширину кнопки для предотвращения прыжков
+    useEffect(() => {
+        if (buttonRef.current && !isProcessing && hasListings && buttonWidth === undefined) {
+            // Сохраняем ширину кнопки когда она не в состоянии загрузки
+            const width = buttonRef.current.offsetWidth;
+            if (width > 0) {
+                setButtonWidth(width);
+            }
+        }
+    }, [isProcessing, hasListings, buttonWidth]);
 
     // Функция для определения расширения файла по языку
     const getFileExtension = (language: string): string => {
@@ -271,6 +284,7 @@ export default function DownloadListingsButton({
             const listings = extractListings();
             if (listings.length === 0) {
                 alert("Листинги не найдены на странице");
+                setIsProcessing(false);
                 return;
             }
 
@@ -299,12 +313,20 @@ export default function DownloadListingsButton({
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
             link.download = zipFileName;
+            link.style.display = 'none';
             document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
-
-            // Освобождаем память
-            URL.revokeObjectURL(link.href);
+            
+            // Безопасное удаление элемента с задержкой
+            setTimeout(() => {
+                if (link.parentNode) {
+                    link.parentNode.removeChild(link);
+                } else if (link.remove) {
+                    link.remove();
+                }
+                // Освобождаем память
+                URL.revokeObjectURL(link.href);
+            }, 100);
         } catch (error) {
             console.error("Ошибка при создании ZIP архива:", error);
             alert("Произошла ошибка при создании архива. Проверьте консоль для деталей.");
@@ -319,15 +341,43 @@ export default function DownloadListingsButton({
     }
 
     return (
-        <div className="margin-top--lg">
-            <button
-                onClick={handleDownload}
-                disabled={isProcessing}
-                className="button button--secondary button--sm"
-            >
-                {isProcessing ? "⏳ Создание архива..." : buttonText}
-            </button>
-        </div>
+        <button
+            ref={buttonRef}
+            onClick={handleDownload}
+            disabled={isProcessing}
+            style={{
+                position: 'relative',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                ...(isProcessing && buttonWidth ? { width: `${buttonWidth}px` } : {}),
+            }}
+        >
+            {isProcessing ? (
+                <span
+                    style={{
+                        display: 'inline-block',
+                        width: '1rem',
+                        height: '1rem',
+                        border: '2px solid currentColor',
+                        borderTopColor: 'transparent',
+                        borderRadius: '50%',
+                        animation: 'spin 0.6s linear infinite',
+                    }}
+                    aria-label="Создание архива"
+                />
+            ) : (
+                <span
+                    style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                    }}
+                >
+                    {buttonText}
+                </span>
+            )}
+        </button>
     );
 }
 

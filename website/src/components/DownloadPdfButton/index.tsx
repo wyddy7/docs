@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useLocation } from "@docusaurus/router";
 import pdfMake from "pdfmake/build/pdfmake";
 import htmlToPdfmake from "html-to-pdfmake";
@@ -125,25 +125,39 @@ const imageToDataURL = (img: HTMLImageElement): Promise<string> => {
 
 export default function DownloadPdfButton() {
     const location = useLocation();
+    const [isProcessing, setIsProcessing] = useState(false);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const [buttonWidth, setButtonWidth] = useState<number | undefined>(undefined);
+
+    // Сохраняем ширину кнопки для предотвращения прыжков
+    useEffect(() => {
+        if (buttonRef.current && !isProcessing && buttonWidth === undefined) {
+            // Сохраняем ширину кнопки когда она не в состоянии загрузки
+            const width = buttonRef.current.offsetWidth;
+            if (width > 0) {
+                setButtonWidth(width);
+            }
+        }
+    }, [isProcessing, buttonWidth]);
 
     const handleDownload = async (
         event: React.MouseEvent<HTMLButtonElement>
     ) => {
-        // Находим основной контент страницы
-        const mainContent =
-            document.querySelector("article") || document.querySelector("main");
-        if (!mainContent) {
-            alert("Не удалось найти контент для генерации PDF");
-            return;
-        }
-
-        // Показываем индикатор загрузки
-        const button = event.currentTarget;
-        const originalText = button.textContent;
-        button.disabled = true;
-        button.textContent = "⏳ Генерация PDF...";
-
+        setIsProcessing(true);
+        
         try {
+            // Находим основной контент страницы
+            const mainContent =
+                document.querySelector("article") || document.querySelector("main");
+            if (!mainContent) {
+                alert("Не удалось найти контент для генерации PDF");
+                setIsProcessing(false);
+                return;
+            }
+
+            // Показываем индикатор загрузки
+            // (теперь используем React состояние isProcessing)
+
             // Инициализируем шрифты перед генерацией
             await initializeFonts();
 
@@ -269,6 +283,7 @@ export default function DownloadPdfButton() {
                 alert(
                     "Ошибка: Контент страницы пустой. Возможно, удалены необходимые элементы."
                 );
+                setIsProcessing(false);
                 return;
             }
 
@@ -592,22 +607,47 @@ export default function DownloadPdfButton() {
             console.error("Ошибка генерации PDF:", error);
             alert("Ошибка при генерации PDF: " + (error as Error).message);
         } finally {
-            // Восстанавливаем кнопку
-            button.disabled = false;
-            if (originalText) {
-                button.textContent = originalText;
-            }
+            setIsProcessing(false);
         }
     };
 
     return (
-        <div className="margin-top--lg">
-            <button
-                onClick={handleDownload}
-                className="button button--secondary button--sm"
-            >
-                📄 Скачать PDF
-            </button>
-        </div>
+        <button
+            ref={buttonRef}
+            onClick={handleDownload}
+            disabled={isProcessing}
+            style={{
+                position: 'relative',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                ...(isProcessing && buttonWidth ? { width: `${buttonWidth}px` } : {}),
+            }}
+        >
+            {isProcessing ? (
+                <span
+                    style={{
+                        display: 'inline-block',
+                        width: '1rem',
+                        height: '1rem',
+                        border: '2px solid currentColor',
+                        borderTopColor: 'transparent',
+                        borderRadius: '50%',
+                        animation: 'spin 0.6s linear infinite',
+                    }}
+                    aria-label="Генерация PDF"
+                />
+            ) : (
+                <span
+                    style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                    }}
+                >
+                    📄 Скачать PDF
+                </span>
+            )}
+        </button>
     );
 }

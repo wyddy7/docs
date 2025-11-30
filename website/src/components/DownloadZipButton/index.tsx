@@ -34,9 +34,14 @@ export default function DownloadZipButton({
         const link = document.createElement("a");
         link.href = fileUrl;
         link.download = fileName || zipPath.split("/").pop() || "download.zip";
+        link.style.display = 'none';
         document.body.appendChild(link);
         link.click();
-        document.body.removeChild(link);
+        
+        // Безопасное удаление элемента
+        if (link.parentNode) {
+            link.parentNode.removeChild(link);
+        }
     };
 
     return (
