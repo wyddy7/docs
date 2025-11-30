@@ -17,8 +17,8 @@ const CUSTOM_DOC_TITLES: Record<string, string> = {
     "course-work/arithmetic-device": "Арифметическое устройство",
     // Организация ЭВМ - 7 семестр
     "computer-organization/labs-sem7/lab6": "Лабораторная работа 6 (Ввод/вывод и прерывания)",
-    "computer-organization/labs-sem7/lab7": "Лабораторная работа 7 (JTAG UART)",
-    "computer-organization/labs-sem7/lab8": "Лабораторная работа 8 (Интервальный таймер)",
+    "computer-organization/labs-sem7/lab7": "Лабораторная работа 7 (Интервальный таймер)",
+    "computer-organization/labs-sem7/lab8": "Лабораторная работа 8 (JTAG UART)",
     // Организация ЭВМ - 6 семестр
     "computer-organization/labs-sem6/lab-manual-sem6": "Методичка 6 семестра",
     "computer-organization/labs-sem6/lab1": "Лабораторная работа 1",
